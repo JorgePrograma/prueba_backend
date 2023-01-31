@@ -1,0 +1,12 @@
+
+	/*
+	"cedula": 123456789,
+	"nombres": "Juan",
+	"apellidos": "gonzales",
+	"email": "juangonzales@gmail.com",
+	"password": "123456789",
+	"password_confirmation": "123456789"*/
+    {
+        "mensaje": "se inicio sesion con exito",
+        "acess_token": "1|dNGTtBslby7rdpYzrm4ljbtZYUbTe1Rbg0FXFA3b"
+    }

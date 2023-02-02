@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FavoritoController;
 use App\Http\Controllers\SanctumAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -14,4 +15,8 @@ Route::post("login", [SanctumAuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post("perfil", [SanctumAuthController::class, 'perfil']);
     Route::post("logout", [SanctumAuthController::class, 'logout']);
+
+    Route::get("lista", [FavoritoController::class, 'index']);
+    Route::post("crear", [FavoritoController::class, 'store']);
+    Route::post("eliminar", [FavoritoController::class, 'delete']);
 });

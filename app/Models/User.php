@@ -30,7 +30,12 @@ class User extends Authenticatable
     ];
 
 /*
-    protected $table="usuario";
-    public $timestamps=false;
+protected $table="usuario";
+public $timestamps=false;
  */
+
+    public function favorito()
+    {
+        return $this->hasMany(Favorito::class);
+    }
 }

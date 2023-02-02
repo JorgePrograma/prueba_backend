@@ -17,7 +17,7 @@ class SanctumAuthController extends Controller
         ]);
         // reglas de cada atributo
         $rules = array(
-            'cedula' => 'required|numeric',
+            'cedula' => 'required|numeric|unique:users',
             'nombres' => 'required',
             'apellidos' => 'required',
             'email' => 'required|unique:users|email',
@@ -33,9 +33,10 @@ class SanctumAuthController extends Controller
             "email.required" => 'por favor ingrese email',
             "password.required" => 'por favor ingrese password',
 
-            "email.unique" => 'email no esta en uso',
+            "email.unique" => 'no se puede usar este email',
             "email.email" => 'email ingresado no es valido',
             "password.confirmed" => 'por favor confirme su password',
+            "cedula.unique" => 'no se puede usar este numero de cedula',
 
         );
 
@@ -45,7 +46,7 @@ class SanctumAuthController extends Controller
         // validacion si el dato es fallido muestra un 500 de lo contrario no pasa nada y se ejecuta la siguiente linea
         if ($validator->fails()) {
             $messajes = $validator->messages();
-            return response()->json(['messages' => $messajes], 500);
+            return response()->json(['mensaje' => $messajes], 422);
         }
 
         $user = new User();
@@ -55,7 +56,8 @@ class SanctumAuthController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->save();
-        return response()->json(['mensaje' => 'usuario registardo con exito'], 200);
+        $token = $user->createToken("auth_token")->plainTextToken;
+        return response()->json(['mensaje' => 'usuario registrado con exito', 'acess_token' => $token, 'usuario' => $user], 200);
     }
 
     public function login(Request $request)
@@ -75,7 +77,6 @@ class SanctumAuthController extends Controller
             "email.required" => 'por favor ingrese email',
             "password.required" => 'por favor ingrese password',
             "email.email" => 'email ingresado no es valido',
-
         );
 
         // captura si hay un error en los datos pasados por request
@@ -84,27 +85,20 @@ class SanctumAuthController extends Controller
         // validacion si el dato es fallido muestra un 500 de lo contrario no pasa nada y se ejecuta la siguiente linea
         if ($validator->fails()) {
             $messajes = $validator->messages();
-            return response()->json(['messages' => $messajes], 500);
+            return response()->json(['messages' => $messajes], 422);
         }
 
         $user = User::where("email", "=", $request->email)->first();
         if (isset($user)) {
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken("auth_token")->plainTextToken;
-                return response()->json(['mensaje' => 'se inicio sesion con exito', "acess_token" => $token], 200);
+                return response()->json(['mensaje' => 'se inicio sesion con exito', "acess_token" => $token, "usuario" => $user], 200);
             } else {
-                return response()->json(['mensaje' => 'password incorrecta'], 200);
+                return response()->json(['mensaje' => 'password incorrecto'], 422);
             }
         } else {
-            return response()->json(['mensaje' => 'usuario no existe'], 200);
+            return response()->json(['mensaje' => 'usuario no existe'], 422);
         }
-        $user->cedula = $request->cedula;
-        $user->nombres = $request->nombres;
-        $user->apellidos = $request->apellidos;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
-        return response()->json(['mensaje' => 'usuario registardo con exito'], 200);
     }
 
     public function perfil()

@@ -13,16 +13,24 @@ class FavoritoController extends Controller
 
     public function store(Request $request)
     {
-        $favorito = new Favorito();
-        $favorito->ref_api = $request->ref_api;
-        $favorito->user_id = $request->user_id;
-        $favorito->save();
-        return response()->json(['mensaje' => 'se guardo el icono'], 200);
+        // Verificar si el usuario ya tiene un producto con el mismo código
+        $existingProduct = Favorito::where('user_id', $request->user_id)->where('ref_api', $request->ref_api)->first();
+        if ($existingProduct) {
+            // Si el usuario ya tiene un producto con el mismo código, devuelve un error
+            return response()->json(['mensaje' => 'Personaje ya se agregado a su lista'], 409);
+        } else {
+            $favorito = new Favorito();
+            $favorito->ref_api = $request->ref_api;
+            $favorito->user_id = $request->user_id;
+            $favorito->save();
+            return response()->json(['mensaje' => 'Personaje agregado'], 200);
+        }
+
+    }
 /*
 
 $favorite = Favorito::create($request->all());
 return response()->json($favorite, 201); */
-    }
 
     public function show(Favorito $favorite)
     {
@@ -41,4 +49,9 @@ return response()->json($favorite, 201); */
         return response()->json(null, 204);
     }
 
+    public function listaFavoritosUser($id)
+    {
+        $favoritos = Favorito::where('user_id', $id)->get();
+        return response()->json($favoritos);
+    }
 }

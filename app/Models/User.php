@@ -13,11 +13,12 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'cedula',
-        'nombres',
-        'apellidos',
+        'name',
         'email',
         'password',
+        'address',
+        'birthdate',
+        'city',
     ];
 
     protected $hidden = [

@@ -10,13 +10,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post("registro", [SanctumAuthController::class, 'registro']);
-Route::post("login", [SanctumAuthController::class, 'login']);
+Route::post("loguin", [SanctumAuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post("perfil", [SanctumAuthController::class, 'perfil']);
+    Route::put("update/{id}", [SanctumAuthController::class, 'update']);
+    Route::post("delete/{id}", [SanctumAuthController::class, 'delete']);
     Route::post("logout", [SanctumAuthController::class, 'logout']);
 
-    Route::get("lista", [FavoritoController::class, 'index']);
+    Route::get("lista/user/{id}", [FavoritoController::class, 'listaFavoritosUser']);
     Route::post("crear", [FavoritoController::class, 'store']);
-    Route::post("eliminar", [FavoritoController::class, 'delete']);
+    Route::delete("eliminar", [FavoritoController::class, 'delete']);
 });

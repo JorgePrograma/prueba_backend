@@ -119,7 +119,7 @@ class SanctumAuthController extends Controller
                 'required', 'max:150', 'email',
                 Rule::unique('users')->ignore($user->id),
             ],
-            'password' => 'sometimes|max:250|min:4',
+            'password' => 'sometimes|max:250|min:4|nullable',
             'address' => 'max:50',
             'birthdate' => 'date|nullable',
             'city' => 'max:50',
@@ -132,7 +132,6 @@ class SanctumAuthController extends Controller
             "email.max" => 'Campo email solo permite 150 caracteres',
             "email.email" => 'Campo email no es valido',
             "email.unique" => 'Campo email no es permitido',
-            "password.required" => 'Campo password es requerido',
             "password.max" => 'Campo password solo permite 250 caracteres',
             "password.min" => 'Campo password debe terner mas de 4 caracteres',
             "address.max" => 'Campo address solo permite 50 caracteres',
@@ -159,7 +158,7 @@ class SanctumAuthController extends Controller
         $user->birthdate = $request->birthdate;
         $user->city = $request->city;
         $user->save();
-        return response()->json(['mensaje' => 'usuario actualizado con exito', 'usuario' => $user], 200);
+            return response()->json(['mensaje' => 'usuario actualizado con exito', 'usuario' => $user], 200);
     }
 
     public function validatePassword($password)
@@ -173,7 +172,6 @@ class SanctumAuthController extends Controller
         $rules = array(
             'password' => 'required|confirmed',
         );
-
 
         // mensaje de errores
         $messajes = array(
@@ -195,7 +193,7 @@ class SanctumAuthController extends Controller
         }
         // buscar el usuario y lo elimina de la base de datos
         $user = User::find($id);
-        //$user->delete();
+        $user->delete();
         return response()->json(['mensaje' => 'cuenta eliminada con exito'], 200);
     }
 

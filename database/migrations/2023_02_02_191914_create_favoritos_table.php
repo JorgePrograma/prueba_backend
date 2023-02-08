@@ -6,15 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('favoritos', function (Blueprint $table) {
-            $table->id(); $table->bigInteger('user_id')->unsigned();
+            $table->id();
+            $table->bigInteger('user_id')->unsigned();
             $table->string('ref_api');
             $table->timestamps();
             $table->foreign('user_id')

@@ -43,10 +43,16 @@ return response()->json($favorite, 201); */
         return response()->json($favorite, 200);
     }
 
-    public function delete(Favorito $favorite)
+    public function delete($userId, $id)
     {
-        $favorite->delete();
-        return response()->json(null, 204);
+        $favorite = Favorito::where('user_id', $userId)
+            ->where('ref_api', $id)
+            ->first();
+        if ($favorite) {
+            $favorite->delete();
+            return response()->json("Eliminado con exito", 200);
+        }
+        return response()->json("No encontrado", 402);
     }
 
     public function listaFavoritosUser($id)
@@ -54,4 +60,17 @@ return response()->json($favorite, 201); */
         $favoritos = Favorito::where('user_id', $id)->get();
         return response()->json($favoritos);
     }
+
+    public function favoritoUser($user_id, $id)
+    {
+        $favorite = Favorito::where('user_id', $user_id)
+            ->where('ref_api', $id)
+            ->first();
+
+        if ($favorite) {
+            return response()->json(true, 200);
+        }
+        return response()->json(false, 200);
+    }
+
 }

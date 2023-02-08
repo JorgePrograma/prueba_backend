@@ -17,7 +17,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post("delete/{id}", [SanctumAuthController::class, 'delete']);
     Route::post("logout", [SanctumAuthController::class, 'logout']);
 
-    Route::get("lista/user/{id}", [FavoritoController::class, 'listaFavoritosUser']);
-    Route::post("crear", [FavoritoController::class, 'store']);
-    Route::delete("eliminar", [FavoritoController::class, 'delete']);
+    Route::get("user/favoritos/{id}", [FavoritoController::class, 'listaFavoritosUser']);
+    Route::post("favorito", [FavoritoController::class, 'store']);
+    Route::delete("favorito/{user_id}/{id}", [FavoritoController::class, 'delete']);
+    Route::get("favorito/{user_id}/{ref_api}", [FavoritoController::class, 'favoritoUser']);
+
 });
